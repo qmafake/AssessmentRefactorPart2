@@ -1,11 +1,10 @@
 package za.co.tradelink.assessment.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import za.co.tradelink.assessment.dto.CreateInvoiceRequest;
+import za.co.tradelink.assessment.dto.InvoiceRequest;
 import za.co.tradelink.assessment.dto.InvoiceLineRequest;
-import za.co.tradelink.assessment.dto.UpdateInvoiceStatusRequest;
+import za.co.tradelink.assessment.dto.InvoiceUpdateStatusRequest;
 import za.co.tradelink.assessment.model.Customer;
 import za.co.tradelink.assessment.model.Invoice;
 import za.co.tradelink.assessment.model.InvoiceLine;
@@ -38,7 +37,7 @@ public class InvoiceService {
                 .orElseThrow(() -> new EntityNotFoundException("Invoice not found"));
     }
 
-    public Invoice createInvoice(CreateInvoiceRequest request) {
+    public Invoice createInvoice(InvoiceRequest request) {
 
         Customer customer = customerRepository.findById(request.getCustomerId())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
@@ -72,12 +71,12 @@ public class InvoiceService {
     }
 
 
-    public Invoice updateInvoiceStatus(UpdateInvoiceStatusRequest updateInvoiceStatusRequest) {
+    public Invoice updateInvoiceStatus(InvoiceUpdateStatusRequest invoiceUpdateStatusRequest) {
 
-        Invoice invoice = invoiceRepository.findById(updateInvoiceStatusRequest.getInvoiceId())
+        Invoice invoice = invoiceRepository.findById(invoiceUpdateStatusRequest.getInvoiceId())
                 .orElseThrow(() -> new EntityNotFoundException("Invoice not found"));
 
-        InvoiceStatus newStatus = updateInvoiceStatusRequest.getNewStatus();
+        InvoiceStatus newStatus = invoiceUpdateStatusRequest.getNewStatus();
 
         if (!(newStatus == InvoiceStatus.PAID) && !(newStatus == InvoiceStatus.CANCELLED)) {
             throw new  IllegalArgumentException("Invalid status change: " + newStatus); //TODO: handle

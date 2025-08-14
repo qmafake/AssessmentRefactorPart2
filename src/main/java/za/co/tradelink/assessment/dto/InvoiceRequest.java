@@ -1,12 +1,11 @@
 package za.co.tradelink.assessment.dto;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public class CreateInvoiceRequest {
+public class InvoiceRequest {
 
     @NotNull(message = "Customer ID is required")
     private Long customerId;

@@ -3,7 +3,7 @@ package za.co.tradelink.assessment.dto;
 import jakarta.validation.constraints.NotNull;
 import za.co.tradelink.assessment.model.InvoiceStatus;
 
-public class UpdateInvoiceStatusRequest {
+public class InvoiceUpdateStatusRequest {
 
     @NotNull(message = "Invoice ID is required")
     private Long invoiceId;

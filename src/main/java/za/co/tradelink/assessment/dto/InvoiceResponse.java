@@ -2,7 +2,7 @@ package za.co.tradelink.assessment.dto;
 
 import za.co.tradelink.assessment.model.InvoiceStatus;
 
-public class InvoiceResponseDTO {
+public class InvoiceResponse {
 
     private Long customerId;
 
@@ -12,7 +12,7 @@ public class InvoiceResponseDTO {
 
     Double totalAmount;
 
-    public InvoiceResponseDTO(Long customerId, String customerName, InvoiceStatus status, Double totalAmount) {
+    public InvoiceResponse(Long customerId, String customerName, InvoiceStatus status, Double totalAmount) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.status = status;

@@ -1,15 +1,15 @@
 package za.co.tradelink.assessment.service;
 
 import org.springframework.stereotype.Service;
-import za.co.tradelink.assessment.dto.InvoiceResponseDTO;
+import za.co.tradelink.assessment.dto.InvoiceResponse;
 import za.co.tradelink.assessment.model.Invoice;
 
 @Service
 public class InvoiceMapper {
 
-    public InvoiceResponseDTO toResponseDTO(Invoice invoice) {
+    public InvoiceResponse toResponseDTO(Invoice invoice) {
 
-        return new InvoiceResponseDTO(
+        return new InvoiceResponse(
                 invoice.getInvoiceId(),
                 invoice.getCustomer().getCustomerName(),
                 invoice.getStatus(),
