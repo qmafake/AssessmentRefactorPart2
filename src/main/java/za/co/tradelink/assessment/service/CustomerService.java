@@ -1,14 +1,12 @@
 package za.co.tradelink.assessment.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import za.co.tradelink.assessment.model.Customer;
 import za.co.tradelink.assessment.repository.CustomerRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 // In CustomerService.java:
 @Service
@@ -65,9 +63,9 @@ public class CustomerService {
         return customer;
     }
 
-    public List<Customer> findCustomersWithCreditLimitGreaterThanAndEmailContaining(Double creditLimit, String email) {
+    public List<Customer> findPremiumCustomers(Double creditLimit, String email) {
 
-        List<Customer> customerList = customerRepository.findCustomersWithCreditLimitGreaterThanAndEmailContaining(creditLimit, email);
+        List<Customer> customerList = customerRepository.findPremiumCustomers(creditLimit, email);
 
         return customerList;
     }

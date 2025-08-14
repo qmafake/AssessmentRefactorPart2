@@ -1,14 +1,11 @@
 package za.co.tradelink.assessment.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.co.tradelink.assessment.model.Customer;
-import za.co.tradelink.assessment.repository.CustomerRepository;
 import za.co.tradelink.assessment.service.CustomerService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -63,7 +60,7 @@ public class CustomerController {
     public List<Customer> getFilteredCustomers(
             @RequestParam("creditLimit") Double creditLimit,
             @RequestParam("email") String email) {
-        return customerService.findCustomersWithCreditLimitGreaterThanAndEmailContaining(creditLimit, email);
+        return customerService.findPremiumCustomers(creditLimit, email);
     }
 
     @GetMapping("/{id}/discount-eligible")
