@@ -1,5 +1,6 @@
 package za.co.tradelink.assessment.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +17,7 @@ public class InvoiceLine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lineId;
 
-    private String item_description;
+    private String itemDescription;
 
     private Double unitPrice;
 
@@ -24,24 +25,24 @@ public class InvoiceLine {
 
 
     @ManyToOne
-    @JoinColumn(name = "invoice_id") 
+    @JoinColumn(name = "invoice_id")
+    @JsonBackReference
     private Invoice invoice;
 
-
     public Long getLineId() {
-        return lineId; 
+        return lineId;
     }
 
-    public void setLineId(Long lineId) { 
-        this.lineId = lineId; 
+    public void setLineId(Long lineId) {
+        this.lineId = lineId;
     }
 
-    public String getDescription() {
-        return item_description;
+    public String getItemDescription() {
+        return itemDescription;
     }
 
-    public void setDescription(String description) {
-        this.item_description = description;
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
     }
 
     public Double getUnitPrice() {

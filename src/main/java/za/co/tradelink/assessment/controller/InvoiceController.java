@@ -1,128 +1,65 @@
 package za.co.tradelink.assessment.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import za.co.tradelink.assessment.model.Customer;
+import za.co.tradelink.assessment.dto.CreateInvoiceRequest;
+import za.co.tradelink.assessment.dto.InvoiceResponseDTO;
+import za.co.tradelink.assessment.dto.UpdateInvoiceStatusRequest;
+import za.co.tradelink.assessment.service.InvoiceMapper;
 import za.co.tradelink.assessment.model.Invoice;
-import za.co.tradelink.assessment.model.InvoiceLine;
-import za.co.tradelink.assessment.repository.CustomerRepository;
-import za.co.tradelink.assessment.repository.InvoiceLineRepository;
-import za.co.tradelink.assessment.repository.InvoiceRepository;
 import za.co.tradelink.assessment.service.InvoiceService;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/invoices")
 public class InvoiceController {
 
-    @Autowired
-    private InvoiceService invoiceService;
+    private final InvoiceService invoiceService;
+    private final InvoiceMapper invoiceMapper;
 
-    @Autowired
-    private InvoiceRepository invoiceRepository;
-
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private InvoiceLineRepository invoiceLineRepository;
-
-    @GetMapping
-    public List<Invoice> getAllInvoices() {
-        return invoiceRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Invoice> getInvoiceById(@PathVariable Long id) {
-        Invoice invoice = invoiceService.findInvoiceById(id);
-        if (invoice != null) {
-            return ResponseEntity.ok(invoice);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public InvoiceController(InvoiceService invoiceService, InvoiceMapper invoiceMapper) {
+        this.invoiceService = invoiceService;
+        this.invoiceMapper = invoiceMapper;
     }
 
     @PostMapping
-    public ResponseEntity<Invoice> createInvoice(@RequestBody Map<String, Object> payload) {
-        try {
-            Long customerId = Long.parseLong(payload.get("customerId").toString());
-            List<Map<String, Object>> lineItems = (List<Map<String, Object>>) payload.get("lineItems");
+    public ResponseEntity<InvoiceResponseDTO> createInvoice(@RequestBody CreateInvoiceRequest request) {
 
-            Customer customer = customerRepository.findById(customerId).orElse(null);
-            if (customer == null) {
-                return ResponseEntity.badRequest().build();
-            }
+        Invoice createdInvoice = invoiceService.createInvoice(request);
+        InvoiceResponseDTO responseDTO = invoiceMapper.toResponseDTO(createdInvoice);
 
-            Invoice invoice = new Invoice();
-            invoice.setCustomer(customer);
-            invoice.setDate(new Date());
-            invoice.setStatus("DRAFT");
-
-            invoice = invoiceRepository.save(invoice);
-
-            List<InvoiceLine> lines = new ArrayList<>();
-            double total = 0.0;
-
-            for (Map<String, Object> lineItem : lineItems) {
-                InvoiceLine line = new InvoiceLine();
-                line.setDescription(lineItem.get("description").toString());
-                line.setQuantity(Integer.parseInt(lineItem.get("quantity").toString()));
-                line.setUnitPrice(Double.parseDouble(lineItem.get("unitPrice").toString()));
-                line.setInvoice(invoice);
-
-                total += line.getQuantity() * line.getUnitPrice();
-
-                invoiceLineRepository.save(line);
-                lines.add(line);
-            }
-
-            invoice.setAmount(total);
-
-            invoice = invoiceRepository.save(invoice);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(invoice);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}/status")
-    public ResponseEntity<String> updateInvoiceStatus(@PathVariable Long id, @RequestBody Map<String, String> payload) {
-        String newStatus = payload.get("status");
+    @GetMapping("/{id}")
+    public ResponseEntity<InvoiceResponseDTO> getInvoiceById(@PathVariable Long id) {
 
-        Invoice invoice = invoiceRepository.findById(id).orElse(null);
-        if (invoice == null) {
-            return ResponseEntity.notFound().build();
-        }
+        Invoice invoice = invoiceService.getInvoiceById(id);
+        InvoiceResponseDTO responseDTO = invoiceMapper.toResponseDTO(invoice);
 
-        if (newStatus.equals("PAID")) {
-            Customer customer = invoice.getCustomer();
-            if (customer.getCreditLimit() < 5000) {
-                customer.setCreditLimit(customer.getCreditLimit() + 100);
-                customerRepository.save(customer);
-            }
-        }
-
-        invoice.setStatus(newStatus);
-        invoiceRepository.save(invoice);
-
-        return ResponseEntity.ok("Status updated to " + newStatus);
+        return ResponseEntity.ok(invoiceMapper.toResponseDTO(invoice));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInvoice(@PathVariable Long id) {
-        invoiceService.deleteInvoice(id);
-        return ResponseEntity.noContent().build();
+    @GetMapping
+    public ResponseEntity<List<InvoiceResponseDTO>> getAllInvoices() {
+        List<Invoice> invoices = invoiceService.getAllInvoices();
+        List<InvoiceResponseDTO> dtoList = invoices.stream()
+                .map(invoiceMapper::toResponseDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtoList);
     }
 
-    @GetMapping("/status/{status}")
-    public List<Invoice> getInvoicesByStatus(@PathVariable String status) {
-        return invoiceService.getInvoicesByStatus(status);
+    @PutMapping("/status")
+    public ResponseEntity<InvoiceResponseDTO> updateInvoiceStatus(
+            @Valid @RequestBody UpdateInvoiceStatusRequest updateInvoiceStatusRequest) {
+
+        Invoice updatedInvoice = invoiceService.updateInvoiceStatus(updateInvoiceStatusRequest);
+        InvoiceResponseDTO responseDTO = invoiceMapper.toResponseDTO(updatedInvoice);
+
+        return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }
 }

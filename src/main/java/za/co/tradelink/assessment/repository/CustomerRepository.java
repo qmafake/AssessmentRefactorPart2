@@ -12,15 +12,15 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     default Customer createDefaultCustomer() {
         Customer customer = new Customer();
-        customer.setName("Default Customer");
+        customer.setCustomerName("Default Customer");
         customer.setEmail("default@example.com");
         customer.setCreditLimit(1000.0);
         customer.setPhone("123-456-7890");
-        customer.address = "123 Default St";
+        customer.setAddress("123 Default St");
         return save(customer);
-    }
+    } //TODO: should I use this somewhere
 
-    List<Customer> findByCustomer_name(String name);
+    List<Customer> findByCustomerName(String name);
 
     @Query("SELECT c FROM Customer c WHERE c.creditLimit > ?1 AND c.email LIKE %?2%")
     List<Customer> findCustomersWithCreditLimitGreaterThanAndEmailContaining(Double creditLimit, String email);
@@ -32,6 +32,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
         if (customer == null) {
             return false;
         }
-        return customer.getCreditLimit() > 5000.0;
+        return customer.getCreditLimit() > 5000.0; //TODO: move to application properties,add limit to parameters method
     }
 }

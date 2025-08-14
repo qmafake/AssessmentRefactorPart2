@@ -1,13 +1,9 @@
 package za.co.tradelink.assessment.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Date;
 import java.util.List;
 
@@ -21,30 +17,37 @@ public class Invoice {
 
     private Date date;
 
-    private Double total_amount;
+    private Double totalAmount;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private InvoiceStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "cust_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @OneToMany(mappedBy = "invoice")
+    @JsonManagedReference
     private List<InvoiceLine> lines;
 
     public Invoice() {
     }
 
-    public void calculateTotal() {
+    public void calculateTotal() { //TODO: better placed in a service layer as it involves business logic.
         double sum = 0.0;
         for (InvoiceLine line : lines) {
             sum += line.getQuantity() * line.getUnitPrice();
         }
-        this.total_amount = sum;
+        this.totalAmount = sum;
     }
 
-    public Long getInvoiceId() { return invoiceId; }
-    public void setInvoiceId(Long id) { this.invoiceId = id; }
+    public Long getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(Long invoiceId) {
+        this.invoiceId = invoiceId;
+    }
 
     public Date getDate() {
         return date;
@@ -54,19 +57,19 @@ public class Invoice {
         this.date = date;
     }
 
-    public Double getAmount() {
-        return total_amount;
+    public Double getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setAmount(Double amount) {
-        this.total_amount = amount;
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
-    public String getStatus() {
+    public InvoiceStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(InvoiceStatus status) {
         this.status = status;
     }
 
