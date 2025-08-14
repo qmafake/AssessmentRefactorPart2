@@ -1,4 +1,4 @@
-package za.co.tradelink.assessment.service;
+package za.co.tradelink.assessment.mapper;
 
 import org.springframework.stereotype.Service;
 import za.co.tradelink.assessment.dto.InvoiceResponse;

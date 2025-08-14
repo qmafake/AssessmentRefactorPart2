@@ -2,13 +2,18 @@ package za.co.tradelink.assessment.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import za.co.tradelink.assessment.dto.CustomerCreateDto;
+import za.co.tradelink.assessment.dto.CustomerResponseDto;
 import za.co.tradelink.assessment.model.Customer;
 import za.co.tradelink.assessment.repository.CustomerRepository;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-// In CustomerService.java:
 @Service
 public class CustomerService {
 
@@ -37,30 +42,32 @@ public class CustomerService {
         return customer.getCreditLimit() > discountEligibilityLimit;
     }
 
-    public List<Customer> findAll() {
+    public List<Customer> getAllCustomers() {
 
         return customerRepository.findAll();
     }
 
     public List<Customer> findByCustomerName(String name) {
-        return customerRepository.findByCustomerName(name);
 
+        List<Customer> customers = customerRepository.findByCustomerName(name);
+
+        return customers != null ? customers : Collections.emptyList();
     }
 
-    public List<Customer> findByEmail(String email) {
-        return customerRepository.findByEmail(email);
-    }
+    public Customer createCustomer(CustomerCreateDto dto) {
 
-    public Customer createCustomer(Customer customer) {
+        Customer customer = new Customer();
+        customer.setCustomerName(dto.getCustomerName());
+        customer.setEmail(dto.getEmail());
+        customer.setCreditLimit(dto.getCreditLimit());
+        customer.setPhone(dto.getPhone());
+        customer.setAddress(dto.getAddress());
+
         return customerRepository.save(customer);
     }
 
-    public Customer findById(Long id) {
-
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
-
-        return customer;
+    public Optional<Customer> findById(Long id) {
+        return customerRepository.findById(id);
     }
 
     public List<Customer> findPremiumCustomers(Double creditLimit, String email) {

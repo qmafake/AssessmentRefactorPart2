@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import za.co.tradelink.assessment.dto.InvoiceRequest;
 import za.co.tradelink.assessment.dto.InvoiceResponse;
 import za.co.tradelink.assessment.dto.InvoiceUpdateStatusRequest;
-import za.co.tradelink.assessment.service.InvoiceMapper;
+import za.co.tradelink.assessment.mapper.InvoiceMapper;
 import za.co.tradelink.assessment.model.Invoice;
 import za.co.tradelink.assessment.service.InvoiceService;
 
