@@ -7,6 +7,7 @@ import za.co.tradelink.assessment.dto.CustomerCreateDTO;
 import za.co.tradelink.assessment.model.Customer;
 import za.co.tradelink.assessment.repository.CustomerRepository;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,7 @@ import java.util.Optional;
 public class CustomerService {
 
     @Value("${customer.discount.eligibility.limit:5000.0}")
-    private Double discountEligibilityLimit;
+    private BigDecimal discountEligibilityLimit;
 
     private CustomerRepository customerRepository;
 
@@ -25,10 +26,9 @@ public class CustomerService {
 
     public Customer createDefaultCustomer() {
 
-
         Customer customer = Customer.builder()
                 .email("default@example.com")
-                .creditLimit(1000.0)
+                .creditLimit(new BigDecimal(1000.0))
                 .phone("123-456-7890")
                 .address("123 Default St")
                 .build();
@@ -37,10 +37,25 @@ public class CustomerService {
 
     }
 
-    public boolean isCustomerEligibleForDiscount(Long customerId) {
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
-        return customer.getCreditLimit() > discountEligibilityLimit;
+
+    public Customer createCustomer(CustomerCreateDTO dto) {
+
+        if (dto.getCustomerName() == null || dto.getCustomerName().isBlank()) {
+            throw new IllegalArgumentException("Customer name is required");
+        }
+        if (customerRepository.existsByEmail(dto.getEmail())) {
+            throw new IllegalStateException("Email already exists");
+        }
+
+        Customer customer = Customer.builder()
+                .customerName(dto.getCustomerName())
+                .email(dto.getEmail())
+                .creditLimit(dto.getCreditLimit())
+                .phone(dto.getPhone())
+                .address(dto.getAddress())
+                .build();
+
+        return customerRepository.save(customer);
     }
 
     public List<Customer> getAllCustomers() {
@@ -55,19 +70,6 @@ public class CustomerService {
         return customers != null ? customers : Collections.emptyList();
     }
 
-    public Customer createCustomer(CustomerCreateDTO dto) {
-
-        Customer customer = Customer.builder()
-                .customerName(dto.getCustomerName())
-                .email(dto.getEmail())
-                .creditLimit(dto.getCreditLimit())
-                .phone(dto.getPhone())
-                .address(dto.getAddress())
-                .build();
-
-        return customerRepository.save(customer);
-    }
-
     public Optional<Customer> findById(Long id) {
         return customerRepository.findById(id);
     }
@@ -78,4 +80,11 @@ public class CustomerService {
 
         return customerList;
     }
+
+    public boolean isCustomerEligibleForDiscount(Long customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+        return customer.getCreditLimit().compareTo(discountEligibilityLimit) > 0;
+    }
+
 }

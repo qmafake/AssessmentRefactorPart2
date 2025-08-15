@@ -36,4 +36,11 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
      * @return list of customers with matching email
      */
     List<Customer> findByEmail(String emailAddress);
+
+    /**
+     * Checks is email already exists
+     * @param emailAddress the exact email to search for
+     * @return list of customers with matching email
+     */
+    boolean existsByEmail(String emailAddress);
 }

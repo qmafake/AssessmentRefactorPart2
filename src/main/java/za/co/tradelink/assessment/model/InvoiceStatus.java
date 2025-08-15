@@ -1,6 +1,6 @@
 package za.co.tradelink.assessment.model;
 
-public enum InvoiceStatus { //TODO: should i move this class to its own pckage
+public enum InvoiceStatus {
     DRAFT,
     PAID,
     CANCELLED

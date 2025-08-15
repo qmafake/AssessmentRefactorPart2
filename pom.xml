@@ -8,10 +8,11 @@
         <version>3.5.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>za.co.tradelink</groupId>
-    <artifactId>Assessment</artifactId>
+    <artifactId>assessment</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Assessment</name>
+    <name>assessment</name>
     <description>Assessment</description>
     <url/>
     <licenses>

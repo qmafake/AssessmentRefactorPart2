@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import za.co.tradelink.assessment.model.Invoice;
 import za.co.tradelink.assessment.model.Customer;
+import za.co.tradelink.assessment.model.InvoiceStatus;
 
 import java.util.Date;
 import java.util.List;
@@ -35,7 +36,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
      * @param status the invoice status to filter by
      * @return list of invoices with matching status
      */
-    List<Invoice> findByStatus(String status);
+    List<Invoice> findByStatus(InvoiceStatus status);
 
     /**
      * Finds invoices with total amount greater than specified value
@@ -55,4 +56,12 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     @Transactional
     @Query("UPDATE Invoice i SET i.status = :status WHERE i.invoiceId = :id")
     int updateStatus(@Param("id") Long id, @Param("status") String status);
+
+    /**
+     * Deletes an invoice
+     * @param id the line ID
+     *
+     */
+    void deleteByInvoiceId(Long id);
+
 }

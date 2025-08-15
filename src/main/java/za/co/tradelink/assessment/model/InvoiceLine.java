@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "invoice_lines")
+@Table(name = "invoice_line")
 @EntityListeners(AuditingEntityListener.class)
 @Data
 @Builder
@@ -53,5 +53,4 @@ public class InvoiceLine {
     protected InvoiceLine() {
         // JPA requires this
     }
-
 }

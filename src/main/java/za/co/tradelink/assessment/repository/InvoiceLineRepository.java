@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import za.co.tradelink.assessment.model.Invoice;
 import za.co.tradelink.assessment.model.InvoiceLine;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -27,7 +28,7 @@ public interface InvoiceLineRepository extends JpaRepository<InvoiceLine, Long> 
      * @return sum of (quantity * unitPrice) for all lines
      */
     @Query("SELECT SUM(il.quantity * il.unitPrice) FROM InvoiceLine il WHERE il.invoice.invoiceId = :invoiceId")
-    Double calculateInvoiceTotal(@Param("invoiceId") Long invoiceId);
+    BigDecimal calculateInvoiceTotal(@Param("invoiceId") Long invoiceId);
 
     /**
      * Finds invoice lines with quantity greater than specified value
@@ -68,4 +69,10 @@ public interface InvoiceLineRepository extends JpaRepository<InvoiceLine, Long> 
     @Transactional
     @Query("UPDATE InvoiceLine il SET il.quantity = :quantity WHERE il.lineId = :lineId")
     int updateQuantity(@Param("lineId") Long lineId, @Param("quantity") Integer quantity);
+
+    /**
+     * Deletes an invoice line item
+     * @param id the line ID
+     */
+    void deleteByInvoice_InvoiceId(Long id);
 }

@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class Customer {
     @PositiveOrZero(message = "Credit limit must be positive or zero")
     @NotNull(message = "Credit limit is required")
     @Column(nullable = false)
-    private Double creditLimit;
+    private BigDecimal creditLimit;
 
     @Pattern(regexp = "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$",
             message = "Invalid phone number format")
