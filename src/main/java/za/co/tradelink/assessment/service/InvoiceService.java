@@ -2,9 +2,9 @@ package za.co.tradelink.assessment.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import za.co.tradelink.assessment.dto.InvoiceRequest;
-import za.co.tradelink.assessment.dto.InvoiceLineRequest;
-import za.co.tradelink.assessment.dto.InvoiceUpdateStatusRequest;
+import za.co.tradelink.assessment.dto.InvoiceRequestDTO;
+import za.co.tradelink.assessment.dto.InvoiceLineRequestDTO;
+import za.co.tradelink.assessment.dto.InvoiceUpdateStatusRequestDTO;
 import za.co.tradelink.assessment.model.Customer;
 import za.co.tradelink.assessment.model.Invoice;
 import za.co.tradelink.assessment.model.InvoiceLine;
@@ -38,7 +38,7 @@ public class InvoiceService {
                 .orElseThrow(() -> new EntityNotFoundException("Invoice not found"));
     }
 
-    public Invoice createInvoice(InvoiceRequest request) {
+    public Invoice createInvoice(InvoiceRequestDTO request) {
 
         Customer customer = customerRepository.findById(request.getCustomerId())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
@@ -53,7 +53,7 @@ public class InvoiceService {
 
         List<InvoiceLine> invoiceLines = new ArrayList<>();
 
-        for (InvoiceLineRequest lineItem : request.getLineItems()) {
+        for (InvoiceLineRequestDTO lineItem : request.getLineItems()) {
 
             InvoiceLine line = InvoiceLine.builder()
                     .itemDescription(lineItem.getDescription())
@@ -90,12 +90,12 @@ public class InvoiceService {
     }
 
 
-    public Invoice updateInvoiceStatus(InvoiceUpdateStatusRequest invoiceUpdateStatusRequest) {
+    public Invoice updateInvoiceStatus(InvoiceUpdateStatusRequestDTO invoiceUpdateStatusRequestDTO) {
 
-        Invoice invoice = invoiceRepository.findById(invoiceUpdateStatusRequest.getInvoiceId())
+        Invoice invoice = invoiceRepository.findById(invoiceUpdateStatusRequestDTO.getInvoiceId())
                 .orElseThrow(() -> new EntityNotFoundException("Invoice not found"));
 
-        InvoiceStatus newStatus = invoiceUpdateStatusRequest.getNewStatus();
+        InvoiceStatus newStatus = invoiceUpdateStatusRequestDTO.getNewStatus();
 
         if (!(newStatus == InvoiceStatus.PAID) && !(newStatus == InvoiceStatus.CANCELLED)) {
             throw new  IllegalArgumentException("Invalid status change: " + newStatus); //TODO: handle

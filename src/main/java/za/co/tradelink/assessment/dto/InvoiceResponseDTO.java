@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
-public class InvoiceResponse {
+public class InvoiceResponseDTO {
 
     private Long customerId;
 

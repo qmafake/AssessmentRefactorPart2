@@ -7,13 +7,12 @@ import jakarta.validation.constraints.Size;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import za.co.tradelink.assessment.dto.CustomerCreateDto;
-import za.co.tradelink.assessment.dto.CustomerResponseDto;
+import za.co.tradelink.assessment.dto.CustomerCreateDTO;
+import za.co.tradelink.assessment.dto.CustomerResponseDTO;
 import za.co.tradelink.assessment.mapper.CustomerMapper;
 import za.co.tradelink.assessment.model.Customer;
 import za.co.tradelink.assessment.service.CustomerService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,9 +29,9 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CustomerResponseDto>> getAllCustomers() {
+    public ResponseEntity<List<CustomerResponseDTO>> getAllCustomers() {
         List<Customer> customers = customerService.getAllCustomers();
-        List<CustomerResponseDto> responseDtos = customers.stream()
+        List<CustomerResponseDTO> responseDtos = customers.stream()
                 .map(customerMapper::toResponseDto)
                 .toList();
 
@@ -40,7 +39,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerResponseDto> findCustomerById(@PathVariable Long id) {
+    public ResponseEntity<CustomerResponseDTO> findCustomerById(@PathVariable Long id) {
         Optional<Customer> customerOptional = customerService.findById(id);
 
         if (customerOptional.isEmpty()) {
@@ -53,29 +52,29 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerResponseDto> createCustomer(@Valid @RequestBody CustomerCreateDto customerCreateDto) {
+    public ResponseEntity<CustomerResponseDTO> createCustomer(@Valid @RequestBody CustomerCreateDTO customerCreateDto) {
 
         Customer customer = customerService.createCustomer(customerCreateDto);
-        CustomerResponseDto responseDto = customerMapper.toResponseDto(customer);
+        CustomerResponseDTO responseDto = customerMapper.toResponseDto(customer);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     // POST default customer
     @PostMapping("/default")
-    public ResponseEntity<CustomerResponseDto> createDefaultCustomer() {
+    public ResponseEntity<CustomerResponseDTO> createDefaultCustomer() {
 
         Customer customer = customerService.createDefaultCustomer();
-        CustomerResponseDto responseDto = customerMapper.toResponseDto(customer);
+        CustomerResponseDTO responseDto = customerMapper.toResponseDto(customer);
         return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<List<CustomerResponseDto>> findCustomersByName(
+    public ResponseEntity<List<CustomerResponseDTO>> findCustomersByName(
             @NotBlank @Size(min=2, max=100) @PathVariable String name) {
 
         List<Customer> customers = customerService.findByCustomerName(name);
 
-        List<CustomerResponseDto> dtos = customers
+        List<CustomerResponseDTO> dtos = customers
                 .stream()
                 .map(customerMapper::toResponseDto)
                 .toList();
@@ -84,13 +83,13 @@ public class CustomerController {
     }
 
     @GetMapping("/premium")
-    public ResponseEntity<List<CustomerResponseDto>> findPremiumCustomers(
+    public ResponseEntity<List<CustomerResponseDTO>> findPremiumCustomers(
             @RequestParam("creditLimit") Double creditLimit,
             @RequestParam("email") @Email String email) {
 
         List<Customer> customers = customerService.findPremiumCustomers(creditLimit, email);
 
-        List<CustomerResponseDto> dtos = customers
+        List<CustomerResponseDTO> dtos = customers
                 .stream()
                 .map(customerMapper::toResponseDto)
                 .toList();

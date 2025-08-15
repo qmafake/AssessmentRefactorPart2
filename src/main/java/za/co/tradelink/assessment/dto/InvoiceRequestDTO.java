@@ -5,13 +5,13 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public class InvoiceRequest {
+public class InvoiceRequestDTO {
 
     @NotNull(message = "Customer ID is required")
     private Long customerId;
 
     @NotEmpty(message = "Invoice must have at least one line item")
-    private List<InvoiceLineRequest> lineItems;
+    private List<InvoiceLineRequestDTO> lineItems;
 
     // Getters and setters
     public Long getCustomerId() {
@@ -22,11 +22,11 @@ public class InvoiceRequest {
         this.customerId = customerId;
     }
 
-    public List<InvoiceLineRequest> getLineItems() {
+    public List<InvoiceLineRequestDTO> getLineItems() {
         return lineItems;
     }
 
-    public void setLineItems(List<InvoiceLineRequest> lineItems) {
+    public void setLineItems(List<InvoiceLineRequestDTO> lineItems) {
         this.lineItems = lineItems;
     }
 }

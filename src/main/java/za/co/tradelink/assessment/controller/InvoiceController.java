@@ -4,9 +4,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import za.co.tradelink.assessment.dto.InvoiceRequest;
-import za.co.tradelink.assessment.dto.InvoiceResponse;
-import za.co.tradelink.assessment.dto.InvoiceUpdateStatusRequest;
+import za.co.tradelink.assessment.dto.InvoiceRequestDTO;
+import za.co.tradelink.assessment.dto.InvoiceResponseDTO;
+import za.co.tradelink.assessment.dto.InvoiceUpdateStatusRequestDTO;
 import za.co.tradelink.assessment.mapper.InvoiceMapper;
 import za.co.tradelink.assessment.model.Invoice;
 import za.co.tradelink.assessment.service.InvoiceService;
@@ -27,38 +27,38 @@ public class InvoiceController {
     }
 
     @PostMapping
-    public ResponseEntity<InvoiceResponse> createInvoice(@RequestBody InvoiceRequest request) {
+    public ResponseEntity<InvoiceResponseDTO> createInvoice(@RequestBody InvoiceRequestDTO request) {
 
         Invoice createdInvoice = invoiceService.createInvoice(request);
-        InvoiceResponse responseDTO = invoiceMapper.toResponseDTO(createdInvoice);
+        InvoiceResponseDTO responseDTO = invoiceMapper.toResponseDTO(createdInvoice);
 
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InvoiceResponse> getInvoiceById(@PathVariable Long id) {
+    public ResponseEntity<InvoiceResponseDTO> getInvoiceById(@PathVariable Long id) {
 
         Invoice invoice = invoiceService.getInvoiceById(id);
-        InvoiceResponse responseDTO = invoiceMapper.toResponseDTO(invoice);
+        InvoiceResponseDTO responseDTO = invoiceMapper.toResponseDTO(invoice);
 
         return ResponseEntity.ok(invoiceMapper.toResponseDTO(invoice));
     }
 
     @GetMapping
-    public ResponseEntity<List<InvoiceResponse>> getAllInvoices() {
+    public ResponseEntity<List<InvoiceResponseDTO>> getAllInvoices() {
         List<Invoice> invoices = invoiceService.getAllInvoices();
-        List<InvoiceResponse> dtoList = invoices.stream()
+        List<InvoiceResponseDTO> dtoList = invoices.stream()
                 .map(invoiceMapper::toResponseDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtoList);
     }
 
     @PutMapping("/status")
-    public ResponseEntity<InvoiceResponse> updateInvoiceStatus(
-            @Valid @RequestBody InvoiceUpdateStatusRequest invoiceUpdateStatusRequest) {
+    public ResponseEntity<InvoiceResponseDTO> updateInvoiceStatus(
+            @Valid @RequestBody InvoiceUpdateStatusRequestDTO invoiceUpdateStatusRequestDTO) {
 
-        Invoice updatedInvoice = invoiceService.updateInvoiceStatus(invoiceUpdateStatusRequest);
-        InvoiceResponse responseDTO = invoiceMapper.toResponseDTO(updatedInvoice);
+        Invoice updatedInvoice = invoiceService.updateInvoiceStatus(invoiceUpdateStatusRequestDTO);
+        InvoiceResponseDTO responseDTO = invoiceMapper.toResponseDTO(updatedInvoice);
 
         return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }

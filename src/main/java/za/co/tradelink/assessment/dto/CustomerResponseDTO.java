@@ -1,6 +1,6 @@
 package za.co.tradelink.assessment.dto;
 
-public class CustomerResponseDto {
+public class CustomerResponseDTO {
 
     private Long id;
     private String customerName;

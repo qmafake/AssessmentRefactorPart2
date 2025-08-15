@@ -8,7 +8,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class InvoiceLineRequest {
+public class InvoiceLineRequestDTO {
 
     @NotBlank(message = "Item description is required")
     private String description;

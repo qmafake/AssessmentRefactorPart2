@@ -2,14 +2,11 @@ package za.co.tradelink.assessment.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import za.co.tradelink.assessment.dto.CustomerCreateDto;
-import za.co.tradelink.assessment.dto.CustomerResponseDto;
+import za.co.tradelink.assessment.dto.CustomerCreateDTO;
 import za.co.tradelink.assessment.model.Customer;
 import za.co.tradelink.assessment.repository.CustomerRepository;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -58,7 +55,7 @@ public class CustomerService {
         return customers != null ? customers : Collections.emptyList();
     }
 
-    public Customer createCustomer(CustomerCreateDto dto) {
+    public Customer createCustomer(CustomerCreateDTO dto) {
 
         Customer customer = Customer.builder()
                 .customerName(dto.getCustomerName())

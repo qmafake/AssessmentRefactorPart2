@@ -1,14 +1,14 @@
 package za.co.tradelink.assessment.mapper;
 
 import org.springframework.stereotype.Service;
-import za.co.tradelink.assessment.dto.CustomerResponseDto;
+import za.co.tradelink.assessment.dto.CustomerResponseDTO;
 import za.co.tradelink.assessment.model.Customer;
 
 @Service
 public class CustomerMapper {
 
-    public CustomerResponseDto toResponseDto(Customer customer) {
-        CustomerResponseDto dto = new CustomerResponseDto();
+    public CustomerResponseDTO toResponseDto(Customer customer) {
+        CustomerResponseDTO dto = new CustomerResponseDTO();
         dto.setId(customer.getId());
         dto.setCustomerName(customer.getCustomerName());
         dto.setEmail(customer.getEmail());
