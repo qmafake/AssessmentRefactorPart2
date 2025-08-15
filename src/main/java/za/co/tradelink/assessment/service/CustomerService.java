@@ -27,13 +27,17 @@ public class CustomerService {
     }
 
     public Customer createDefaultCustomer() {
-        Customer customer = new Customer();
-        customer.setCustomerName("Default Customer");
-        customer.setEmail("default@example.com");
-        customer.setCreditLimit(1000.0);
-        customer.setPhone("123-456-7890");
-        customer.setAddress("123 Default St");
+
+
+        Customer customer = Customer.builder()
+                .email("default@example.com")
+                .creditLimit(1000.0)
+                .phone("123-456-7890")
+                .address("123 Default St")
+                .build();
+
         return customerRepository.save(customer);
+
     }
 
     public boolean isCustomerEligibleForDiscount(Long customerId) {
@@ -56,12 +60,13 @@ public class CustomerService {
 
     public Customer createCustomer(CustomerCreateDto dto) {
 
-        Customer customer = new Customer();
-        customer.setCustomerName(dto.getCustomerName());
-        customer.setEmail(dto.getEmail());
-        customer.setCreditLimit(dto.getCreditLimit());
-        customer.setPhone(dto.getPhone());
-        customer.setAddress(dto.getAddress());
+        Customer customer = Customer.builder()
+                .customerName(dto.getCustomerName())
+                .email(dto.getEmail())
+                .creditLimit(dto.getCreditLimit())
+                .phone(dto.getPhone())
+                .address(dto.getAddress())
+                .build();
 
         return customerRepository.save(customer);
     }

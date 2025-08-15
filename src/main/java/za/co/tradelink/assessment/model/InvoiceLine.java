@@ -1,75 +1,57 @@
 package za.co.tradelink.assessment.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
-@Table(name = "invoice_line")
+@Table(name = "invoice_lines")
+@EntityListeners(AuditingEntityListener.class)
+@Data
+@Builder
+@AllArgsConstructor
 public class InvoiceLine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "line_id")
     private Long lineId;
 
+    @NotBlank(message = "Item description is required")
+    @Size(max = 255, message = "Description must be less than 255 characters")
     private String itemDescription;
 
+    @NotNull(message = "Unit price is required")
+    @Positive(message = "Unit price must be positive")
+//    @Column(precision = 10, scale = 2) //TODO: revisit when changing to Big Decimal
     private Double unitPrice;
 
+    @NotNull(message = "Quantity is required")
+    @Min(value = 1, message = "Quantity must be at least 1")
     private Integer quantity;
 
-
-    @ManyToOne
-    @JoinColumn(name = "invoice_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "invoice_id", nullable = false)
     @JsonBackReference
     private Invoice invoice;
 
-    public Long getLineId() {
-        return lineId;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    protected InvoiceLine() {
+        // JPA requires this
     }
 
-    public void setLineId(Long lineId) {
-        this.lineId = lineId;
-    }
-
-    public String getItemDescription() {
-        return itemDescription;
-    }
-
-    public void setItemDescription(String itemDescription) {
-        this.itemDescription = itemDescription;
-    }
-
-    public Double getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(Double unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Invoice getInvoice() {
-        return invoice;
-    }
-
-    public void setInvoice(Invoice invoice) {
-        this.invoice = invoice;
-    }
-
-    public Double calculateLineTotal() {
-        return quantity * unitPrice;
-    }
 }

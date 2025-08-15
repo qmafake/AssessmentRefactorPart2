@@ -42,21 +42,33 @@ public class InvoiceService {
         Customer customer = customerRepository.findById(request.getCustomerId())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
-        Invoice invoice = new Invoice();
-        invoice.setCustomer(customer);
-        invoice.setDate(new Date());
-        invoice.setStatus(InvoiceStatus.DRAFT);
+        Invoice invoice = Invoice.builder()
+                .customer(customer)
+                .date(new Date())
+                .status(InvoiceStatus.DRAFT)
+                .build();
 
         double total = 0.0;
         List<InvoiceLine> invoiceLines = new ArrayList<>();
 
         for (InvoiceLineRequest lineItem : request.getLineItems()) {
-            InvoiceLine line = new InvoiceLine();
+
+            InvoiceLine line = InvoiceLine.builder()
+                    .itemDescription(lineItem.getDescription())
+                    .quantity(lineItem.getQuantity())
+                    .unitPrice(lineItem.getUnitPrice())
+                    .build();
+
+            total += line.getQuantity() * line.getUnitPrice();
+            invoiceLines.add(line);
+
+
+            /*InvoiceLine line = new InvoiceLine();
             line.setItemDescription(lineItem.getDescription());
             line.setQuantity(lineItem.getQuantity());
             line.setUnitPrice(lineItem.getUnitPrice());
             total += line.getQuantity() * line.getUnitPrice();
-            invoiceLines.add(line);
+            invoiceLines.add(line);*/
         }
 
         invoice.setTotalAmount(total);
