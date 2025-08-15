@@ -1,6 +1,8 @@
 package za.co.tradelink.assessment.controller;
 
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,8 @@ public class InvoiceController {
 
     private final InvoiceService invoiceService;
     private final InvoiceMapper invoiceMapper;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     public InvoiceController(InvoiceService invoiceService, InvoiceMapper invoiceMapper) {
         this.invoiceService = invoiceService;
@@ -29,8 +33,12 @@ public class InvoiceController {
     @PostMapping
     public ResponseEntity<InvoiceResponseDTO> createInvoice(@RequestBody InvoiceRequestDTO request) {
 
+        logger.info("Create invoice: {}", request);
+
         Invoice createdInvoice = invoiceService.createInvoice(request);
         InvoiceResponseDTO responseDTO = invoiceMapper.toResponseDTO(createdInvoice);
+
+        logger.info("Created invoice: {}", responseDTO);
 
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
@@ -46,19 +54,25 @@ public class InvoiceController {
 
     @GetMapping
     public ResponseEntity<List<InvoiceResponseDTO>> getAllInvoices() {
+
         List<Invoice> invoices = invoiceService.getAllInvoices();
         List<InvoiceResponseDTO> dtoList = invoices.stream()
                 .map(invoiceMapper::toResponseDTO)
                 .collect(Collectors.toList());
+
         return ResponseEntity.ok(dtoList);
     }
 
     @PutMapping("/status")
     public ResponseEntity<InvoiceResponseDTO> updateInvoiceStatus(
-            @Valid @RequestBody InvoiceUpdateStatusRequestDTO invoiceUpdateStatusRequestDTO) {
+            @Valid @RequestBody InvoiceUpdateStatusRequestDTO request) {
 
-        Invoice updatedInvoice = invoiceService.updateInvoiceStatus(invoiceUpdateStatusRequestDTO);
+        logger.info("Update invoice id - {} to status - {}", request.getInvoiceId(), request.getNewStatus());
+
+        Invoice updatedInvoice = invoiceService.updateInvoiceStatus(request);
         InvoiceResponseDTO responseDTO = invoiceMapper.toResponseDTO(updatedInvoice);
+
+        logger.info("Update customer id - {} invoice updated", responseDTO.getCustomerId());
 
         return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }

@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,8 @@ public class CustomerController {
 
     private final CustomerService customerService;
     private final CustomerMapper customerMapper;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     public CustomerController(CustomerService customerService, CustomerMapper customerMapper) {
         this.customerService = customerService;
@@ -30,6 +34,7 @@ public class CustomerController {
 
     @GetMapping
     public ResponseEntity<List<CustomerResponseDTO>> getAllCustomers() {
+
         List<Customer> customers = customerService.getAllCustomers();
         List<CustomerResponseDTO> responseDtos = customers.stream()
                 .map(customerMapper::toResponseDto)
@@ -54,8 +59,13 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<CustomerResponseDTO> createCustomer(@Valid @RequestBody CustomerCreateDTO customerCreateDto) {
 
+        logger.info("Create customer: {}", customerCreateDto);
+
         Customer customer = customerService.createCustomer(customerCreateDto);
         CustomerResponseDTO responseDto = customerMapper.toResponseDto(customer);
+
+        logger.info("Created customer: {}", responseDto);
+
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
