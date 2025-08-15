@@ -1,0 +1,456 @@
+{
+	"info": {
+		"_postman_id": "51984dbe-9ce9-45a7-8840-6bf078144474",
+		"name": "Demo - Assessment Part2 Tradelink",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10221482"
+	},
+	"item": [
+		{
+			"name": "Create Customer",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Digest username=\"\", realm=\"\", nonce=\"\", uri=\"/service-api/v1/transaction/payment\", response=\"a0d8062262ec5397b68f4e04fa6c9fbd\", opaque=\"\"",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"customerName\": \"MacG\",\n  \"email\": \"mac.g@poscast.co.za\",\n  \"creditLimit\": 5000.00,\n  \"phone\": \"+27 82 123 4567\",\n  \"address\": \"123 Main Street, Cape Town\"\n}\n"
+				},
+				"url": {
+					"raw": "http://localhost:9090/api/customers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Customer 2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Digest username=\"\", realm=\"\", nonce=\"\", uri=\"/service-api/v1/transaction/payment\", response=\"a0d8062262ec5397b68f4e04fa6c9fbd\", opaque=\"\"",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"customerName\": \"Michael\",\n  \"email\": \"mike.again@two.for.one\",\n  \"creditLimit\": 5000.00,\n  \"phone\": \"+27 82 123 4567\",\n  \"address\": \"5 Neverland Street, Cape Town\"\n}\n"
+				},
+				"url": {
+					"raw": "http://localhost:9090/api/customers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Customer by Id",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Digest username=\"\", realm=\"\", nonce=\"\", uri=\"/service-api/v1/transaction/payment\", response=\"a0d8062262ec5397b68f4e04fa6c9fbd\", opaque=\"\"",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9090/api/customers/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"customers",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Customer by name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Digest username=\"\", realm=\"\", nonce=\"\", uri=\"/service-api/v1/transaction/payment\", response=\"a0d8062262ec5397b68f4e04fa6c9fbd\", opaque=\"\"",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9090/api/customers/name/Michael",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"customers",
+						"name",
+						"Michael"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View All Customers",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Proxy-Authorization",
+						"value": "Digest username=\"\", realm=\"\", nonce=\"\", uri=\"/service-api/v1/transaction/payment\", response=\"a0d8062262ec5397b68f4e04fa6c9fbd\", opaque=\"\"",
+						"disabled": true
+					},
+					{
+						"key": "Accept",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9090/api/customers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Invoice",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Digest username=\"\", realm=\"\", nonce=\"\", uri=\"/service-api/v1/transaction/payment\", response=\"a0d8062262ec5397b68f4e04fa6c9fbd\", opaque=\"\"",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"customerId\": \"1\",\n  \"lineItems\": [\n    {\n      \"description\": \"Water\",\n      \"quantity\": 1,      \n      \"unitPrice\": 12.25\n    },\n    {\n      \"description\": \"Cake\",\n      \"quantity\": 2,      \n      \"unitPrice\": 15.25\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9090/api/invoices",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"invoices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Invoice Status",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Digest username=\"\", realm=\"\", nonce=\"\", uri=\"/service-api/v1/transaction/payment\", response=\"a0d8062262ec5397b68f4e04fa6c9fbd\", opaque=\"\"",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"invoiceId\": \"1\",\n  \"newStatus\": \"PAID\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9090/api/invoices/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"invoices",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Receipt by Id",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Digest username=\"\", realm=\"\", nonce=\"\", uri=\"/service-api/v1/transaction/payment\", response=\"a0d8062262ec5397b68f4e04fa6c9fbd\", opaque=\"\"",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9090/api/invoices/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"invoices",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View All Receipts",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Proxy-Authorization",
+						"value": "Digest username=\"\", realm=\"\", nonce=\"\", uri=\"/service-api/v1/transaction/payment\", response=\"a0d8062262ec5397b68f4e04fa6c9fbd\", opaque=\"\"",
+						"disabled": true
+					},
+					{
+						"key": "Accept",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9090/api/invoices",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"invoices"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
