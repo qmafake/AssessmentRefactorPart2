@@ -31,8 +31,8 @@ public class InvoiceLine {
 
     @NotNull(message = "Unit price is required")
     @Positive(message = "Unit price must be positive")
-//    @Column(precision = 10, scale = 2) //TODO: revisit when changing to Big Decimal
-    private Double unitPrice;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal unitPrice;
 
     @NotNull(message = "Quantity is required")
     @Min(value = 1, message = "Quantity must be at least 1")

@@ -13,6 +13,7 @@ import za.co.tradelink.assessment.repository.CustomerRepository;
 import za.co.tradelink.assessment.repository.InvoiceLineRepository;
 import za.co.tradelink.assessment.repository.InvoiceRepository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +49,8 @@ public class InvoiceService {
                 .status(InvoiceStatus.DRAFT)
                 .build();
 
-        double total = 0.0;
+        BigDecimal total = BigDecimal.valueOf(0.0);
+
         List<InvoiceLine> invoiceLines = new ArrayList<>();
 
         for (InvoiceLineRequest lineItem : request.getLineItems()) {
@@ -59,9 +61,14 @@ public class InvoiceService {
                     .unitPrice(lineItem.getUnitPrice())
                     .build();
 
-            total += line.getQuantity() * line.getUnitPrice();
-            invoiceLines.add(line);
+//            total += line.getQuantity() * line.getUnitPrice(); //TODO: remove
 
+            BigDecimal quantity  = BigDecimal.valueOf(lineItem.getQuantity());
+            BigDecimal unitPrice  = lineItem.getUnitPrice();
+
+            total = total.add(quantity.multiply(unitPrice));
+
+            invoiceLines.add(line);
 
             /*InvoiceLine line = new InvoiceLine();
             line.setItemDescription(lineItem.getDescription());

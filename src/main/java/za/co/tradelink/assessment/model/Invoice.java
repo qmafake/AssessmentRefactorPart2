@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +36,7 @@ public class Invoice {
     private Date date;
 
     @PositiveOrZero
-    private Double totalAmount;  //TODO: make BigDecimal
+    private BigDecimal totalAmount;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -50,6 +51,7 @@ public class Invoice {
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @Builder.Default // Ensures builder initializes this field
     private List<InvoiceLine> lines = new ArrayList<>();
 
     @CreatedDate
